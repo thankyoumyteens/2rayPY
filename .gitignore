@@ -3,5 +3,6 @@
 venv/
 vms.json
 vm_list
+url_config
 config.json
 *.log

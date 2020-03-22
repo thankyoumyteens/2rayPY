@@ -68,7 +68,4 @@ class SubscribeHandler:
 
 
 if __name__ == '__main__':
-    # SubscribeHandler('https://api.duang.cloud/v2rayn_subscribe/9011/GydE3W1siiWY').update_vm_list()
-    SubscribeHandler(
-        'https://v2.fit/modules/servers/V2raySocks/osubscribe.php?sid=2188&token=Hj8EFGePQnfw').update_vm_list()
-    # SubscribeHandler('https://subs.holytech.bid/osubscribe.php?sid=39392&token=DuAlNd2QxnLr').update_vm_list()
+    pass
