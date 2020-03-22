@@ -1,0 +1,7 @@
+.idea/
+*.iml
+venv/
+vms.json
+vm_list
+config.json
+*.log
