@@ -67,8 +67,9 @@ class SubscribeHandler:
         return res
 
     # test node status
-    def _test_ping(self, node):
-        self._write_to_config(node)
+    def _test_ping(self, node=None):
+        if node:
+            self._write_to_config(node)
         socks.set_default_proxy(socks.SOCKS5, '127.0.0.1', 1080)
         socket.socket = socks.socksocket
         try:
@@ -77,7 +78,7 @@ class SubscribeHandler:
             # print(response.read().decode('utf-8'))
             time_end = time.time()  # todo...
             return time_end - time_start
-        except URLError as e:
+        except URLError:
             # print(e.reason)
             return -1
 
@@ -93,12 +94,12 @@ class SubscribeHandler:
         config_content = config_content.replace('$ADDRESS', target_node['add'])
         config_content = config_content.replace('$HOST', target_node['host'])
         config_content = config_content.replace('$USER_ID', target_node['id'])
-        config_content = config_content.replace('$NET', '"{}"'.format(target_node['net']) if target_node[
-                                                                                                 'net'] != '' else 'null')
+        config_content = config_content.replace('$NET', '"{}"'.format(
+            target_node['net']) if target_node['net'] != '' else 'null')
         config_content = config_content.replace('$PATH', target_node['path'])
         config_content = config_content.replace('$PORT', target_node['port'])
-        config_content = config_content.replace('$TLS', '"{}"'.format(target_node['tls']) if target_node[
-                                                                                                 'tls'] != '' else 'null')
+        config_content = config_content.replace('$TLS', '"{}"'.format(
+            target_node['tls']) if target_node['tls'] != '' else 'null')
         config_json = os.path.join(self._v2ray_path, 'config.json')
         if os.path.exists(config_json):
             os.remove(config_json)
