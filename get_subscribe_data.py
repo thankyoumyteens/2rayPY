@@ -15,8 +15,12 @@ import os
 class SubscribeHandler:
 
     def __init__(self):
-        self.urls = []
         current_path = os.path.abspath(__file__)
+        with open('url_config', 'r', encoding='utf-8') as f:
+            urls = f.read()
+        self.urls = []
+        for url in urls.splitlines():
+            self.urls.append(url)
         self._root_path = os.path.dirname(current_path)
         self._v2ray_path = os.path.join(self._root_path, 'v2ray-linux-64')
         self._vm_list = os.path.join(self._root_path, 'vm_list')
@@ -89,10 +93,12 @@ class SubscribeHandler:
         config_content = config_content.replace('$ADDRESS', target_node['add'])
         config_content = config_content.replace('$HOST', target_node['host'])
         config_content = config_content.replace('$USER_ID', target_node['id'])
-        config_content = config_content.replace('$NET', '"{}"'.format(target_node['net']) if target_node['net'] != '' else 'null')
+        config_content = config_content.replace('$NET', '"{}"'.format(target_node['net']) if target_node[
+                                                                                                 'net'] != '' else 'null')
         config_content = config_content.replace('$PATH', target_node['path'])
         config_content = config_content.replace('$PORT', target_node['port'])
-        config_content = config_content.replace('$TLS', '"{}"'.format(target_node['tls']) if target_node['tls'] != '' else 'null')
+        config_content = config_content.replace('$TLS', '"{}"'.format(target_node['tls']) if target_node[
+                                                                                                 'tls'] != '' else 'null')
         config_json = os.path.join(self._v2ray_path, 'config.json')
         if os.path.exists(config_json):
             os.remove(config_json)
@@ -160,9 +166,5 @@ class SubscribeHandler:
 
 
 if __name__ == '__main__':
-    with open('url_config', 'r', encoding='utf-8') as f:
-        urls = f.read()
     sh = SubscribeHandler()
-    for url in urls.splitlines():
-        sh.add_subscribe_url(url)
     sh.start()
