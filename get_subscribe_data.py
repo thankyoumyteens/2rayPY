@@ -74,7 +74,7 @@ class SubscribeHandler:
         socket.socket = socks.socksocket
         try:
             time_start = time.time()
-            response = urlopen('https://www.google.com')
+            response = urlopen('https://www.google.com', timeout=3)
             # print(response.read().decode('utf-8'))
             time_end = time.time()  # todo...
             return time_end - time_start
@@ -84,6 +84,7 @@ class SubscribeHandler:
 
     # update config.json
     def _write_to_config(self, target_node):
+        self._terminate_v2ray()
         with open(os.path.join(self._root_path, 'config.json.template'), 'r', encoding='utf-8') as f_template:
             config_content = f_template.read()
         # $xx is placeholder
@@ -105,6 +106,8 @@ class SubscribeHandler:
             os.remove(config_json)
         with open(config_json, 'a+', encoding='utf-8') as f_config_json:
             f_config_json.write(config_content)
+        self._run_v2ray()
+        time.sleep(1)
 
     def _run_v2ray(self):
         p = subprocess.Popen('./v2ray-linux-64/v2ray',
@@ -154,11 +157,13 @@ class SubscribeHandler:
                     os.remove(self._vm_list)
                 nodes = self._load_vm_list()
             elif op == '2':
-                for node in nodes:
-                    print('testing {}'.format(node['add']))
-                    r = self._test_ping(node)
-                    nodes_delay[node['add']] = r
-                    print('use {} ms'.format(str(r)))
+                with open('test_ping', 'w', encoding='utf-8') as f:
+                    for node in nodes:
+                        print('testing {}'.format(node['add']))
+                        r = self._test_ping(node)
+                        nodes_delay[node['add']] = r
+                        print('use {} s'.format(str(r)))
+                        f.write('node: {}\tdelay: {}\n'.format(node['add'], str(r)))
                 print('done!\n')
             elif op == '3':
                 pass

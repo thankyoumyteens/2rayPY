@@ -6,3 +6,4 @@ vm_list
 url_config
 config.json
 *.log
+test_ping
