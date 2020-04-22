@@ -130,7 +130,7 @@ class SubscribeHandler:
         print('===========menu==========\n')
         print('1: update node list\n')
         print('2: ping node list\n')
-        print('3: use the fastest node\n')
+        print('3: enter node name to use\n')
 
     def start(self):
         nodes = self._load_vm_list()
@@ -166,7 +166,12 @@ class SubscribeHandler:
                         f.write('node: {}\tdelay: {}\n'.format(node['add'], str(r)))
                 print('done!\n')
             elif op == '3':
-                pass
+                node_name = input('enter the node name:\n')
+                for node in nodes:
+                    if node['add'] == node_name:
+                        self._write_to_config(node)
+                        break
+                print('done!\n')
             else:
                 print('input invalid!\n')
 
